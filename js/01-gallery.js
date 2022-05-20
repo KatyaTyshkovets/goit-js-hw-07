@@ -37,14 +37,25 @@ function onclick(e) {
     return;
   }
   
-  const resultOnClick = e.target.dataset.source
-
   const instance = basicLightbox.create(
     `
-    <img src="${resultOnClick}" width="800" height="600">
-`
-  )
-  instance.show()
+    <img src="${e.target.dataset.source}">`,
+    {
+      closable: false,
+      onShow: () => {
+        window.addEventListener('keydown', onEskey);
+      },
+      onClose: () => {
+        window.removeEventListener('keydown', onEskey);
+      },
+    },
+  );
+  function onEskey(e) {
+    if (e.code !== 'Escape') {
+      return;
+    }
+    instance.close();
+  }
+  instance.show();
 
-  
 };
